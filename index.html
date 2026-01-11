@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>XBoateng</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/satellite.js/4.0.0/satellite.min.js"></script>
+    
+    <style>
+        /* GHANA THEME PALETTE */
+        :root { 
+            --gh-red: #CE1126; 
+            --gh-gold: #FCD116; 
+            --gh-green: #006B3F; 
+            --glass: rgba(0, 10, 5, 0.95); 
+        }
+        body { margin: 0; background: #000; font-family: 'Courier New', monospace; color: var(--gh-gold); overflow: hidden; }
+        #view-port { position: absolute; width: 100%; height: 100%; z-index: 1; }
+        
+        /* --- THE GHANA LOADING SCREEN --- */
+        #boot-screen {
+            position: fixed; z-index: 1000; width: 100%; height: 100%;
+            background: #000; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; transition: opacity 1.5s;
+        }
+
+        /* 1. The Ghana Flag (Top) */
+        .boot-flag {
+            width: 200px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            filter: drop-shadow(0 0 20px rgba(206, 17, 38, 0.4));
+        }
+
+        /* 2. Your Logo (Center) */
+        .boot-logo { 
+            width: 120px; height: 120px; 
+            margin-bottom: 30px; 
+            animation: pulse 2s infinite ease-in-out;
+            filter: drop-shadow(0 0 10px var(--gh-gold));
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.8; }
+        }
+
+        /* 3. The Terminal Text */
+        #terminal-output {
+            width: 500px; height: 160px; font-size: 0.85rem;
+            color: var(--gh-green); overflow: hidden; line-height: 1.5;
+            border-left: 4px solid var(--gh-red); padding-left: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            margin-bottom: 10px;
+        }
+
+        /* --- HUD (HEADS UP DISPLAY) --- */
+        .hud { position: absolute; z-index: 10; width: 100%; height: 100%; pointer-events: none; }
+        .panel { position: absolute; background: var(--glass); border: 1px solid var(--gh-green); padding: 15px; pointer-events: auto; backdrop-filter: blur(5px); }
+        
+        /* Header */
+        .system-header { top: 20px; left: 20px; display: flex; align-items: center; gap: 15px; border-left: 5px solid var(--gh-red); }
+        .brand-info h1 { margin:0; font-size: 1.8rem; letter-spacing: 4px; color: #fff; text-shadow: 0 0 10px var(--gh-green); }
+        
+        /* Panels */
+        #locator-panel { bottom: 20px; left: 20px; width: 300px; border-bottom: 3px solid var(--gh-gold); }
+        #events-panel { top: 20px; right: 20px; width: 300px; }
+        
+        /* Countdown */
+        #countdown { font-size: 3.5rem; font-weight: bold; color: #fff; text-shadow: 0 0 20px var(--gh-red); }
+
+        /* Blink Animation */
+        @keyframes blink { 50% { opacity: 0; } }
+    </style>
+</head>
+<body>
+
+    <div id="boot-screen">
+        <img src="Ghana-Flag-removebg-preview.png" class="boot-flag" alt="GH">
+        
+        <img src="Gemini_Generated_Image_44hg3244hg3244hg-removebg-preview.png" class="boot-logo" alt="LOGO">
+        
+        <div id="terminal-output"></div>
+        <div style="width: 500px; height: 3px; background: #222;">
+            <div id="boot-progress" style="width: 0%; height: 100%; background: var(--gh-gold); transition: width 0.2s;"></div>
+        </div>
+    </div>
+
+    <div class="hud">
+        <div class="system-header panel">
+            <img src="Gemini_Generated_Image_44hg3244hg3244hg-removebg-preview.png" alt="X" style="width:50px; height:50px;">
+            <div class="brand-info">
+                <h1>XBoateng</h1> Event Tracker
+                <div style="color:var(--gh-gold); font-size:0.7rem; letter-spacing:2px; margin-top:5px;">
+                    STATUS: <span style="color:var(--gh-green); animation: blink 1s infinite;">● ONLINE</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="locator-panel" class="panel">
+            <div style="color:var(--gh-gold); font-size:0.7rem; margin-bottom:10px; font-weight:bold;">TRACKING SYSTEM // ACTIVE</div>
+            <div id="iss-pos" style="font-size:1rem; color:#fff;">CONNECTING...</div>
+            <div style="font-size:0.65rem; color:var(--gh-green); margin-top:8px;">SECTOR: GHANA-ALPHA NODE</div>
+        </div>
+
+        <div id="events-panel" class="panel">
+            <div style="color:var(--gh-gold); font-size:0.7rem; margin-bottom:10px; border-bottom:1px solid var(--gh-red);">MISSION LOG // JAN 11 2026</div>
+            <div style="margin-bottom:10px; border-left:2px solid var(--gh-green); padding-left:10px; font-size:0.8rem;">
+                <b>SPACEX PANDORA</b><br>Successful deployment. Data link stable.
+            </div>
+            <div style="margin-bottom:10px; border-left:2px solid var(--gh-gold); padding-left:10px; font-size:0.8rem;">
+                <b>JUPITER OPPOSITION</b><br>Maximum visibility achieved.
+            </div>
+        </div>
+
+        <div style="position:absolute; bottom:20px; right:20px; text-align:right;">
+            <div style="color:var(--gh-gold); font-size:0.7rem; letter-spacing:2px;">NEXT LAUNCH: STARLINK 6-97</div>
+            <div id="countdown">00:00:00</div>
+        </div>
+    </div>
+
+    <div id="view-port"></div>
+
+    <script>
+        // --- BOOT LOGIC ---
+        const terminal = document.getElementById('terminal-output');
+        const lines = [
+            "> INITIALIZING GHANA COMMAND KERNEL...",
+            "> LOADING FLAG ASSET: Ghana-Flag.png...",
+            "> LOADING LOGO ASSET: 44HG32.png...",
+            "> AUTHENTICATING VALIANT ORBITAL UPLINK...",
+            "> SYNCING SATELLITE TLE DATA...",
+            "> SYSTEM STATUS: GREEN.",
+            "> WELCOME, COMMANDER."
+        ];
+        
+        let lineIdx = 0;
+        function typeLine() {
+            if (lineIdx < lines.length) {
+                terminal.innerHTML += lines[lineIdx] + "<br>";
+                lineIdx++;
+                document.getElementById('boot-progress').style.width = (lineIdx / lines.length * 100) + "%";
+                setTimeout(typeLine, 400);
+            } else {
+                setTimeout(() => {
+                    document.getElementById('boot-screen').style.opacity = "0";
+                    setTimeout(() => { document.getElementById('boot-screen').style.display = "none"; }, 1500);
+                }, 1000);
+            }
+        }
+        typeLine();
+
+        // --- 3D EARTH ---
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('view-port').appendChild(renderer.domElement);
+
+        const earth = new THREE.Mesh(
+            new THREE.SphereGeometry(4, 64, 64),
+            new THREE.MeshPhongMaterial({
+                map: new THREE.TextureLoader().load('https://unpkg.com/three-globe/example/img/earth-night.jpg'),
+                emissive: new THREE.Color(0x006B3F), emissiveIntensity: 0.1
+            })
+        );
+        scene.add(earth);
+        const sun = new THREE.DirectionalLight(0xffffff, 1.5);
+        sun.position.set(5,3,5); scene.add(sun);
+        scene.add(new THREE.AmbientLight(0x222222));
+        camera.position.z = 10;
+
+        // --- SATELLITE TRACKER ---
+        const line1 = "1 25544U 98067A   26011.50004492  .00009772  00000-0  18407-3 0  9998";
+        const line2 = "2 25544  51.6332   9.9851 0007637 355.2000   4.8914 15.49175445";
+        const satrec = satellite.twoline2satrec(line1, line2);
+
+        function update() {
+            // Update ISS
+            const now = new Date();
+            const posAndVel = satellite.propagate(satrec, now);
+            const gmst = satellite.gstime(now);
+            const posGd = satellite.eciToGeodetic(posAndVel.position, gmst);
+            document.getElementById('iss-pos').innerText = `LAT: ${(posGd.latitude*180/Math.PI).toFixed(2)} | LON: ${(posGd.longitude*180/Math.PI).toFixed(2)}`;
+            
+            // Update Timer (Jan 12 Launch)
+            const target = new Date("January 12, 2026 12:42:00").getTime();
+            const diff = target - now.getTime();
+            const h = Math.floor(diff / 3600000);
+            const m = Math.floor((diff % 3600000) / 60000);
+            const s = Math.floor((diff % 60000) / 1000);
+            document.getElementById('countdown').innerText = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            earth.rotation.y += 0.0015;
+            update();
+            renderer.render(scene, camera);
+        }
+        animate();
+    </script>
+</body>
+</html><html lang="en">
+<head>
+  <script src="//unpkg.com/globe.gl"></script>
+  <style>
+    body { margin: 0; background: #000; overflow: hidden; font-family: sans-serif; }
+    #globeViz { width: 100vw; height: 100vh; }
+    .overlay {
+      position: absolute; top: 20px; left: 20px; color: white;
+      background: rgba(0,0,0,0.6); padding: 15px; border-radius: 8px;
+      border: 1px solid #444; pointer-events: none;
+    }
+    .watermark {
+      position: absolute; bottom: 20px; right: 20px;
+      color: rgba(255,255,255,0.4); font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="globeViz"></div>
+  
+  <div class="overlay">
+    <h2 style="margin:0; color: #00d4ff;">EARTH LOCATOR 2026</h2>
+    <p>Status: <span style="color: #0f0;">ONLINE</span></p>
+    <p style="font-size: 12px;">Drag to rotate • Scroll to zoom</p>
+  </div>
+
+  <div class="watermark">RELEASED ON: YOUR-URL-HERE.COM</div>
+
+  <script>
+    // Initialize the 3D Globe
+    const world = Globe()
+      (document.getElementById('globeViz'))
+      // Using a high-res "Earth at Night" texture for the 3D stuff
+      .globeImageUrl('//unpkg.com/three-globe/example/img/earth-night.jpg')
+      .bumpImageUrl('//unpkg.com/three-globe/example/img/earth-topology.png')
+      .backgroundImageUrl('//unpkg.com/three-globe/example/img/night-sky.png')
+      .showAtmosphere(true)
+      .atmosphereColor('#4a90e2')
+      .atmosphereDayNightRatio(0.7);
+
+    // Auto-rotate the Earth
+    world.controls().autoRotate = true;
+    world.controls().autoRotateSpeed = 0.5;
+  </script>
+</body>
+</html>
